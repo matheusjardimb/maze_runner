@@ -1,0 +1,8 @@
+# Lint and pre-commit
+ruff==0.4.2
+pre-commit==3.6.2
+flake8==6.0.0
+
+# Tests
+pytest==7.3.1
+pytest-cov==5.0.0
