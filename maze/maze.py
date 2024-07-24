@@ -1,30 +1,12 @@
 import copy
 import csv
 import logging
-from dataclasses import dataclass
+import os
+from time import sleep
+
+from maze.position import Position
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class Position:
-    x: int
-    y: int
-
-    def __str__(self):
-        return f"X={self.x}, Y={self.y}"
-
-    def new_position_up(self) -> "Position":
-        return Position(self.x, self.y - 1)
-
-    def new_position_down(self) -> "Position":
-        return Position(self.x, self.y + 1)
-
-    def new_position_left(self) -> "Position":
-        return Position(self.x - 1, self.y)
-
-    def new_position_right(self) -> "Position":
-        return Position(self.x + 1, self.y)
 
 
 class Maze:
@@ -51,19 +33,21 @@ class Maze:
         with open(maze_file_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             line_count = 0
-            for idx, cells in enumerate(csv_reader):
+            for y_pos, cells in enumerate(csv_reader):
+                # Validate maze width
                 if self.maze_width is None:
                     self.maze_width = len(cells)
                 elif self.maze_width != len(cells):
                     raise Exception("All lines should have the same width")
 
-                start_position = cells.index(self.START_POS_MARKER)
-                if start_position != -1:
-                    self.current_position = Position(idx, start_position)
+                # Validate has start position
+                x_pos = cells.index(self.START_POS_MARKER)
+                if x_pos != -1:
+                    self.current_position = Position(x=x_pos, y=y_pos)
 
-                for cell_idx, cell in enumerate(cells):
+                for x_pos, cell in enumerate(cells):
                     if cell == self.FINISH_POS_MARKER:
-                        self.finish_positions.append(Position(x=cell_idx, y=idx))
+                        self.finish_positions.append(Position(x=x_pos, y=y_pos))
 
                 start_cell_count += cells.count(self.START_POS_MARKER)
                 finish_cell_count += cells.count(self.FINISH_POS_MARKER)
@@ -78,26 +62,33 @@ class Maze:
         else:
             logger.info(f"Found {finish_cell_count} finishing cells.")
 
-    def print_maze_status(self) -> None:
+    def print_maze_status(
+        self, clean_console: bool = True, sleep_after_print: float = 0.5
+    ) -> None:
+        if clean_console:
+            self.clear_console()
+
         maze = copy.deepcopy(self.maze)
         maze[self.current_position.y][self.current_position.x] = self.ACTUAL_POS_MARKER
+        lines = []
         for line in maze:
             print("".join(line))
+
+        for line in lines:
+            print(line)
+
+        self.sleep(sleep_after_print)
 
     def has_finished(self) -> bool:
         return self.current_position in self.finish_positions
 
     @staticmethod
     def clear_console() -> None:
-        import os
-
         os.system("cls" if os.name == "nt" else "clear")
 
     @staticmethod
-    def sleep(interval: float = 0.5) -> None:
-        import time
-
-        time.sleep(interval)
+    def sleep(interval: float) -> None:
+        sleep(interval)
 
     def can_move_to_position(self, new_pos: Position) -> bool:
         if new_pos.x < 0 or new_pos.y < 0:
@@ -135,30 +126,21 @@ class Maze:
             return new_pos
         return False
 
-    def move_up(self) -> bool:
-        new_pos = self.can_move_up()
+    def __move_x(self, direction_method) -> bool:
+        new_pos = direction_method()
         if not new_pos:
             self.current_position = new_pos
             return True
         return False
+
+    def move_up(self) -> bool:
+        return self.__move_x(self.can_move_up)
 
     def move_down(self) -> bool:
-        new_pos = self.can_move_down()
-        if not new_pos:
-            self.current_position = new_pos
-            return True
-        return False
+        return self.__move_x(self.can_move_down)
 
     def move_left(self) -> bool:
-        new_pos = self.can_move_left()
-        if not new_pos:
-            self.current_position = new_pos
-            return True
-        return False
+        return self.__move_x(self.can_move_left)
 
     def move_right(self) -> bool:
-        new_pos = self.can_move_right()
-        if new_pos:
-            self.current_position = new_pos
-            return True
-        return False
+        return self.__move_x(self.can_move_right)
