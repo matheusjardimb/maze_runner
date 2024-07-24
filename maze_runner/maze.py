@@ -4,7 +4,7 @@ import logging
 import os
 from time import sleep
 
-from maze.position import Position
+from maze_runner.position import Position
 
 logger = logging.getLogger(__name__)
 
