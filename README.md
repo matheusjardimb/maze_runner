@@ -12,3 +12,4 @@
 - [ ] Publicar projeto como lib pip
 - [ ] Servir os mapas como uma API
 - [ ] Para limpar o console durante o debug, é necessário ativar "Emulate terminal in output console" no PyCharm
+- [ ] Add imagem em "Social preview" no GitHub
