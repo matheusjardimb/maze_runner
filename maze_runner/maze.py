@@ -128,7 +128,7 @@ class Maze:
 
     def __move_x(self, direction_method) -> bool:
         new_pos = direction_method()
-        if not new_pos:
+        if new_pos is not False:
             self.current_position = new_pos
             return True
         return False
