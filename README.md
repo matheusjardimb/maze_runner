@@ -6,13 +6,13 @@
 ## TODO
 
 - [x] Publicar projeto como lib pip
-- [ ] Contar quantos passos foram dados até o momento (e no final)
-- [ ] Add limitador de passos ('timeout')
-- [ ] Add menu seletor de mapa (lista todas opções de .csv em maps/)
+- [x] Add limitador de passos ('timeout')
+- [x] Contar quantos passos foram dados até o momento (e no final)
 - [ ] Gerar gif da animação total?
     - [ ] Add rodapé e cabeçalho no gif
     - [ ] Add número de vezes que cada célula foi 'pisada'
 - [ ] Add imagem em "Social preview" no GitHub
+- [ ] Add menu seletor de mapa (lista todas opções de .csv em maps/)
 - [ ] Servir os mapas como uma API
 
 ## Desenvolvimento

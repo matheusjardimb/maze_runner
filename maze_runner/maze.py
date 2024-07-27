@@ -61,6 +61,7 @@ class Maze:
             logger.info(f"Found {finish_cell_count} finishing cells.")
 
         self.step_limit = self.maze_width * self.maze_height
+        self.steps_taken = 0
 
     def print_maze_status(
         self, clean_console: bool = True, sleep_after_print: float = 0.5
@@ -70,6 +71,7 @@ class Maze:
         if clean_console:
             self.clear_console()
 
+        print(f"Steps: {self.steps_taken}/{self.step_limit}")
         maze = copy.deepcopy(self.maze)
         maze[self.current_position.y][self.current_position.x] = self.ACTUAL_POS_MARKER
         lines = []
@@ -78,6 +80,11 @@ class Maze:
 
         for line in lines:
             print(line)
+
+        if self.has_finished():
+            print(
+                f"Exit found at {self.current_position} with {self.steps_taken} steps."
+            )
 
     def has_finished(self) -> bool:
         return self.current_position in self.finish_positions
@@ -128,9 +135,9 @@ class Maze:
 
     def __move_position(self, direction_method) -> bool:
         self.print_maze_status()
-        if self.step_limit == 0:
+        if self.steps_taken > self.step_limit:
             raise Exception("Step limit reached")
-        self.step_limit -= 1
+        self.steps_taken += 1
 
         new_pos = direction_method()
         if new_pos is not False:

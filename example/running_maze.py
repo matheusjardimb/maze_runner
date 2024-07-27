@@ -10,4 +10,3 @@ if "__main__" == __name__:
             maze.move_left()
 
     maze.print_maze_status()
-    print(f"Exit found at {maze.current_position}")
