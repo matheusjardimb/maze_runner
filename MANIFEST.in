@@ -1,0 +1,4 @@
+include LICENSE
+include README.md
+include VERSION
+include maze_runner/maps/*.csv

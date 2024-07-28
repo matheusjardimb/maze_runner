@@ -1,14 +1,12 @@
-from maze import Maze
+from maze_runner.maze import Maze
 
 if "__main__" == __name__:
-    maze = Maze("maps/02.csv")
+    maze = Maze("maze_runner/maps/02.csv")
     maze.clear_console()
 
+    maze.print_maze_status()
     while not maze.has_finished():
-        maze.print_maze_status()
-
         if maze.can_move_left():
             maze.move_left()
 
     maze.print_maze_status()
-    print(f"Exit found at {maze.current_position}")
