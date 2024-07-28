@@ -14,20 +14,18 @@ class Maze:
     FINISH_POS_MARKER = "F"
     ACTUAL_POS_MARKER = "A"
 
-    maze: list = []
-
-    maze_width: int = None
-    maze_height: int = 0
-
-    current_position: Position
-    start_position: Position
-    finish_positions: list[Position] = []
-
     def __init__(self, maze_file_path: str):
         super().__init__()
-        self.load_maze_file(maze_file_path)
+        self.maze = []
 
-    def load_maze_file(self, maze_file_path):
+        self.maze_width = None
+        self.maze_height = 0
+
+        self.current_position = None
+        self.start_position = None
+        self.finish_positions = []
+
+        # Start loading Maze file
         start_cell_count = 0
         finish_cell_count = 0
         with open(maze_file_path) as csv_file:
@@ -62,12 +60,18 @@ class Maze:
         else:
             logger.info(f"Found {finish_cell_count} finishing cells.")
 
+        self.step_limit = self.maze_width * self.maze_height
+        self.steps_taken = 0
+
     def print_maze_status(
         self, clean_console: bool = True, sleep_after_print: float = 0.5
     ) -> None:
+        self.sleep(sleep_after_print)
+
         if clean_console:
             self.clear_console()
 
+        print(f"Steps: {self.steps_taken}/{self.step_limit}")
         maze = copy.deepcopy(self.maze)
         maze[self.current_position.y][self.current_position.x] = self.ACTUAL_POS_MARKER
         lines = []
@@ -77,7 +81,10 @@ class Maze:
         for line in lines:
             print(line)
 
-        self.sleep(sleep_after_print)
+        if self.has_finished():
+            print(
+                f"Exit found at {self.current_position} with {self.steps_taken} steps."
+            )
 
     def has_finished(self) -> bool:
         return self.current_position in self.finish_positions
@@ -126,21 +133,27 @@ class Maze:
             return new_pos
         return False
 
-    def __move_x(self, direction_method) -> bool:
+    def __move_position(self, direction_method) -> bool:
+        self.print_maze_status()
+        if self.steps_taken > self.step_limit:
+            raise Exception("Step limit reached")
+        self.steps_taken += 1
+
         new_pos = direction_method()
-        if not new_pos:
+        if new_pos is not False:
             self.current_position = new_pos
             return True
+        print("Step missed, can't move in this direction")
         return False
 
     def move_up(self) -> bool:
-        return self.__move_x(self.can_move_up)
+        return self.__move_position(self.can_move_up)
 
     def move_down(self) -> bool:
-        return self.__move_x(self.can_move_down)
+        return self.__move_position(self.can_move_down)
 
     def move_left(self) -> bool:
-        return self.__move_x(self.can_move_left)
+        return self.__move_position(self.can_move_left)
 
     def move_right(self) -> bool:
-        return self.__move_x(self.can_move_right)
+        return self.__move_position(self.can_move_right)
