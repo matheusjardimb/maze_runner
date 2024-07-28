@@ -1,15 +1,22 @@
 import datetime
-import numpy as np
-import matplotlib.pyplot as plt
+
 import imageio
 import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 # Function to plot the maze and the current position
 def plot_maze(
-    maze, position=None, path=None, text=None, green_cells=None, yellow_cells=None
+    maze,
+    position=None,
+    path=None,
+    text_above=None,
+    text_below=None,
+    green_cells=None,
+    yellow_cells=None,
 ):
-    fig, ax = plt.subplots(figsize=(5, 6))  # Increase figure height for text
+    fig, ax = plt.subplots(figsize=(5, 7))  # Increase figure height for text
     ax.imshow(maze, cmap="binary")
 
     if green_cells:
@@ -47,11 +54,23 @@ def plot_maze(
 
     ax.axis("off")
 
-    if text:
+    if text_above:
+        fig.text(
+            0.5,
+            0.95,
+            text_above,
+            fontsize=12,
+            color="black",
+            ha="center",
+            va="center",
+            bbox=dict(facecolor="white", alpha=0.5),
+        )
+
+    if text_below:
         fig.text(
             0.5,
             0.05,
-            text,
+            text_below,
             fontsize=12,
             color="black",
             ha="center",
@@ -92,7 +111,8 @@ def create_gif():
             maze,
             position=pos,
             path=path[: i + 1],
-            text="matheusjardimb.com",
+            text_above="Above the Maze",
+            text_below="matheusjardimb.com",
             green_cells=green_cells,
             yellow_cells=yellow_cells,
         )

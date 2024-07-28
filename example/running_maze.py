@@ -1,7 +1,7 @@
 from maze_runner.maze import Maze
 
 if "__main__" == __name__:
-    maze = Maze("maze_runner/maps/02.csv")
+    maze = Maze("maps/02.csv")
     maze.clear_console()
 
     maze.print_maze_status()

@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class Maze:
+    WALL_MARKER = "#"
     START_POS_MARKER = "S"
     FINISH_POS_MARKER = "F"
     ACTUAL_POS_MARKER = "A"
@@ -21,16 +22,15 @@ class Maze:
         self.maze_width = None
         self.maze_height = 0
 
-        self.current_position = None
+        self.positions = []
         self.start_position = None
         self.finish_positions = []
 
         # Start loading Maze file
-        start_cell_count = 0
-        finish_cell_count = 0
         with open(maze_file_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             line_count = 0
+            row = []
             for y_pos, cells in enumerate(csv_reader):
                 # Validate maze width
                 if self.maze_width is None:
@@ -41,24 +41,28 @@ class Maze:
                 # Validate has start position
                 x_pos = cells.index(self.START_POS_MARKER)
                 if x_pos != -1:
-                    self.current_position = Position(x=x_pos, y=y_pos)
+                    if self.start_position is None:
+                        self.start_position = Position(x=x_pos, y=y_pos)
+                        self.positions.append(self.start_position)
+                    else:
+                        raise Exception("Map should have ony one starting cell")
 
                 for x_pos, cell in enumerate(cells):
                     if cell == self.FINISH_POS_MARKER:
                         self.finish_positions.append(Position(x=x_pos, y=y_pos))
 
-                start_cell_count += cells.count(self.START_POS_MARKER)
-                finish_cell_count += cells.count(self.FINISH_POS_MARKER)
+                    row.append(1 if cell == self.WALL_MARKER else 0)
+
+                self.finish_positions.append(cells.count(self.FINISH_POS_MARKER))
                 self.maze.append(cells)
             print(f"Processed {line_count} lines.")
 
         self.maze_height = len(self.maze)
-        if start_cell_count != 1:
-            raise Exception("Map should have one starting cell")
-        if finish_cell_count < 1:
+
+        if len(self.finish_positions) == 0:
             raise Exception("Map has no finishing cells")
         else:
-            logger.info(f"Found {finish_cell_count} finishing cells.")
+            logger.info(f"Found {len(self.finish_positions)} finishing cell(s).")
 
         self.step_limit = self.maze_width * self.maze_height
         self.steps_taken = 0
@@ -73,7 +77,8 @@ class Maze:
 
         print(f"Steps: {self.steps_taken}/{self.step_limit}")
         maze = copy.deepcopy(self.maze)
-        maze[self.current_position.y][self.current_position.x] = self.ACTUAL_POS_MARKER
+        cur_pos = self.get_current_position()
+        maze[cur_pos.y][cur_pos.x] = self.ACTUAL_POS_MARKER
         lines = []
         for line in maze:
             print("".join(line))
@@ -82,12 +87,13 @@ class Maze:
             print(line)
 
         if self.has_finished():
-            print(
-                f"Exit found at {self.current_position} with {self.steps_taken} steps."
-            )
+            print(f"Exit found at {cur_pos} with {self.steps_taken} steps.")
+
+    def get_current_position(self):
+        return self.positions[-1]
 
     def has_finished(self) -> bool:
-        return self.current_position in self.finish_positions
+        return self.get_current_position() in self.finish_positions
 
     @staticmethod
     def clear_console() -> None:
@@ -109,29 +115,22 @@ class Maze:
             or cell_data == self.START_POS_MARKER
         )
 
-    def can_move_up(self) -> Position | bool:
-        new_pos = self.current_position.new_position_up()
+    def __can_move_to(self, new_pos) -> Position | bool:
         if self.can_move_to_position(new_pos):
             return new_pos
         return False
+
+    def can_move_up(self) -> Position | bool:
+        return self.__can_move_to(self.get_current_position().new_position_up())
 
     def can_move_down(self) -> Position | bool:
-        new_pos = self.current_position.new_position_down()
-        if self.can_move_to_position(new_pos):
-            return new_pos
-        return False
+        return self.__can_move_to(self.get_current_position().new_position_down())
 
     def can_move_left(self) -> Position | bool:
-        new_pos = self.current_position.new_position_left()
-        if self.can_move_to_position(new_pos):
-            return new_pos
-        return False
+        return self.__can_move_to(self.get_current_position().new_position_left())
 
     def can_move_right(self) -> Position | bool:
-        new_pos = self.current_position.new_position_right()
-        if self.can_move_to_position(new_pos):
-            return new_pos
-        return False
+        return self.__can_move_to(self.get_current_position().new_position_right())
 
     def __move_position(self, direction_method) -> bool:
         self.print_maze_status()
@@ -141,7 +140,7 @@ class Maze:
 
         new_pos = direction_method()
         if new_pos is not False:
-            self.current_position = new_pos
+            self.positions.append(new_pos)
             return True
         print("Step missed, can't move in this direction")
         return False
