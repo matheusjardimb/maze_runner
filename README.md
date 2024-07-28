@@ -3,6 +3,11 @@
 [![PyPI Version](https://img.shields.io/pypi/v/maze_runner.svg?style=flat-square)](https://pypi.python.org/p/maze_runner)
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/matheusjardimb/maze_runner/)
 
+## Regras
+
+- Implemente seu algorítmo para encontrar a saída do labirinto
+- O programa irá falhar caso o limite de passos for atingido
+
 ## TODO
 
 - [x] Publicar projeto como lib pip
