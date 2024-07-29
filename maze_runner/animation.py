@@ -85,24 +85,16 @@ def plot_maze(
     return image
 
 
-def create_gif():
+def create_gif(header, maze, path, start_position, finish_positions):
     # Create a simple maze (0: path, 1: wall)
-    maze = np.array(
-        [
-            [1, 1, 1, 1, 1, 1, 1],
-            [1, 0, 0, 0, 1, 0, 1],
-            [1, 0, 1, 0, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1],
-        ]
-    )
+    maze = np.array(maze)
 
     # Define the path (sequence of (row, col) positions)
-    path = [(1, 1), (1, 2), (1, 3), (2, 3), (3, 3), (3, 4), (3, 5)]
+    path = [(cell.y, cell.x) for cell in path]
 
     # Define green and yellow cells
-    green_cells = [(1, 1), (2, 3)]
-    yellow_cells = [(1, 2), (3, 4)]
+    green_cells = [(start_position.y, start_position.x)]
+    yellow_cells = [(cell.y, cell.x) for cell in finish_positions]
 
     # Create frames for each step in the path
     frames = []
@@ -111,7 +103,7 @@ def create_gif():
             maze,
             position=pos,
             path=path[: i + 1],
-            text_above="Above the Maze",
+            text_above=header,
             text_below="matheusjardimb.com",
             green_cells=green_cells,
             yellow_cells=yellow_cells,
@@ -124,6 +116,3 @@ def create_gif():
         frames,
         fps=1,
     )
-
-
-create_gif()

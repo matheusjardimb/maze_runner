@@ -4,6 +4,7 @@ import logging
 import os
 from time import sleep
 
+from maze_runner.animation import create_gif
 from maze_runner.position import Position
 
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ class Maze:
         with open(maze_file_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             line_count = 0
-            row = []
+
             for y_pos, cells in enumerate(csv_reader):
                 # Validate maze width
                 if self.maze_width is None:
@@ -40,21 +41,20 @@ class Maze:
                     raise Exception("All lines should have the same width")
 
                 # Validate has start position
-                x_pos = cells.index(self.START_POS_MARKER)
-                if x_pos != -1:
-                    if self.start_position is None:
-                        self.start_position = Position(x=x_pos, y=y_pos)
-                        self.positions.append(self.start_position)
-                    else:
-                        raise Exception("Map should have ony one starting cell")
+                if self.START_POS_MARKER in cells:
+                    x_pos = cells.index(self.START_POS_MARKER)
+                    if x_pos != -1:
+                        if self.start_position is None:
+                            self.start_position = Position(x=x_pos, y=y_pos)
+                            self.positions.append(self.start_position)
+                        else:
+                            raise Exception("Map should have ony one starting cell")
 
+                row = []
                 for x_pos, cell in enumerate(cells):
                     if cell == self.FINISH_POS_MARKER:
                         self.finish_positions.append(Position(x=x_pos, y=y_pos))
-
                     row.append(1 if cell == self.WALL_MARKER else 0)
-
-                # self.finish_positions.append(cells.count(self.FINISH_POS_MARKER))
                 self.maze.append(row)
             print(f"Processed {line_count} lines.")
 
@@ -67,6 +67,15 @@ class Maze:
 
         self.step_limit = self.maze_width * self.maze_height
         self.steps_taken = 0
+
+    def generate_animation(self, header: str):
+        create_gif(
+            header,
+            self.maze,
+            self.positions,
+            self.start_position,
+            self.finish_positions,
+        )
 
     def print_maze_status(
         self, clean_console: bool = True, sleep_after_print: float = 0.5
