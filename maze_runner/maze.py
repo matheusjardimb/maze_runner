@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class Maze:
+    EMPTY_CELL = 0
     WALL_MARKER = "#"
     START_POS_MARKER = "S"
     FINISH_POS_MARKER = "F"
@@ -53,8 +54,8 @@ class Maze:
 
                     row.append(1 if cell == self.WALL_MARKER else 0)
 
-                self.finish_positions.append(cells.count(self.FINISH_POS_MARKER))
-                self.maze.append(cells)
+                # self.finish_positions.append(cells.count(self.FINISH_POS_MARKER))
+                self.maze.append(row)
             print(f"Processed {line_count} lines.")
 
         self.maze_height = len(self.maze)
@@ -77,8 +78,17 @@ class Maze:
 
         print(f"Steps: {self.steps_taken}/{self.step_limit}")
         maze = copy.deepcopy(self.maze)
+        maze = [
+            [" " if cell == self.EMPTY_CELL else "#" for cell in row] for row in maze
+        ]
+        maze[self.start_position.y][self.start_position.x] = self.START_POS_MARKER
+
+        for finish_position in self.finish_positions:
+            maze[finish_position.y][finish_position.x] = self.FINISH_POS_MARKER
+
         cur_pos = self.get_current_position()
         maze[cur_pos.y][cur_pos.x] = self.ACTUAL_POS_MARKER
+
         lines = []
         for line in maze:
             print("".join(line))
@@ -108,12 +118,7 @@ class Maze:
             return False
         if new_pos.x > self.maze_width - 1 or new_pos.y > self.maze_height - 1:
             return False
-        cell_data = self.maze[new_pos.y][new_pos.x].strip()
-        return (
-            cell_data == ""
-            or cell_data == self.FINISH_POS_MARKER
-            or cell_data == self.START_POS_MARKER
-        )
+        return self.maze[new_pos.y][new_pos.x] == self.EMPTY_CELL
 
     def __can_move_to(self, new_pos) -> Position | bool:
         if self.can_move_to_position(new_pos):
