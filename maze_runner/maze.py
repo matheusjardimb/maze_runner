@@ -17,8 +17,15 @@ class Maze:
     FINISH_POS_MARKER = "F"
     ACTUAL_POS_MARKER = "A"
 
-    def __init__(self, maze_file_path: str):
+    def __init__(
+        self, maze_file_path: str, steps_limit: int = None, sleep_interval: float = 0.5
+    ):
         super().__init__()
+
+        if sleep_interval < 0:
+            raise Exception("Sleep interval should be >= 0")
+        self.sleep_interval = sleep_interval
+
         self.maze = []
 
         self.maze_width = None
@@ -65,7 +72,14 @@ class Maze:
         else:
             logger.info(f"Found {len(self.finish_positions)} finishing cell(s).")
 
-        self.step_limit = self.maze_width * self.maze_height
+        if steps_limit is None:
+            self.step_limit = self.maze_width * self.maze_height * 2
+        else:
+            if steps_limit <= 1:
+                raise Exception("Steps limit should be > 1")
+            else:
+                self.step_limit = steps_limit
+
         self.steps_taken = 0
 
     def generate_animation(self, header: str):
@@ -77,10 +91,8 @@ class Maze:
             self.finish_positions,
         )
 
-    def print_maze_status(
-        self, clean_console: bool = True, sleep_after_print: float = 0.5
-    ) -> None:
-        self.sleep(sleep_after_print)
+    def print_maze_status(self, clean_console: bool = True) -> None:
+        self.sleep(self.sleep_interval)
 
         if clean_console:
             self.clear_console()

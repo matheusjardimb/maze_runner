@@ -3,22 +3,12 @@
 [![PyPI Version](https://img.shields.io/pypi/v/maze_runner.svg?style=flat-square)](https://pypi.python.org/p/maze_runner)
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/matheusjardimb/maze_runner/)
 
+![readme_animation.gif](docs%2Freadme_animation.gif)
+
 ## Regras
 
 - Implemente seu algorítmo para encontrar a saída do labirinto
 - O programa irá falhar caso o limite de passos for atingido
-
-## TODO
-
-- [x] Publicar projeto como lib pip
-- [x] Add limitador de passos ('timeout')
-- [x] Contar quantos passos foram dados até o momento (e no final)
-- [ ] Gerar gif da animação total?
-    - [X] Add rodapé e cabeçalho no gif
-    - [ ] Add número de vezes que cada célula foi 'pisada'
-- [ ] Add imagem em "Social preview" no GitHub
-- [ ] Add menu seletor de mapa (lista todas opções de .csv em maps/)
-- [ ] Servir os mapas como uma API
 
 ## Desenvolvimento
 
@@ -34,3 +24,8 @@ O erro abaixo pode ocorrer no console ao executar o comando `clear` (para limpar
 Para resolvê-lo será necessário ativar "Emulate terminal in output console" no Debug do PyCharm:
 
 ![fix_pycharm.png](docs%2Ffix_pycharm.png)
+
+## TODO
+
+- [ ] Add menu seletor de mapa (lista todas opções de .csv em maps/)
+- [ ] Servir os mapas como uma API

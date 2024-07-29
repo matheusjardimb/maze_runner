@@ -6,7 +6,21 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# Function to plot the maze and the current position
+def draw_cells(ax, cells, color):
+    if cells:
+        for cell in cells:
+            rect = patches.Rectangle(
+                (cell[1] - 0.5, cell[0] - 0.5),
+                1,
+                1,
+                linewidth=1,
+                edgecolor="none",
+                facecolor=color,
+                alpha=0.3,
+            )
+            ax.add_patch(rect)
+
+
 def plot_maze(
     maze,
     position=None,
@@ -16,37 +30,25 @@ def plot_maze(
     green_cells=None,
     yellow_cells=None,
 ):
-    fig, ax = plt.subplots(figsize=(5, 7))  # Increase figure height for text
+    fig, ax = plt.subplots(figsize=(5, 6))  # Increase figure height for text
     ax.imshow(maze, cmap="binary")
 
-    if green_cells:
-        for cell in green_cells:
-            rect = patches.Rectangle(
-                (cell[1] - 0.5, cell[0] - 0.5),
-                1,
-                1,
-                linewidth=1,
-                edgecolor="none",
-                facecolor="green",
-                alpha=0.3,
-            )
-            ax.add_patch(rect)
-
-    if yellow_cells:
-        for cell in yellow_cells:
-            rect = patches.Rectangle(
-                (cell[1] - 0.5, cell[0] - 0.5),
-                1,
-                1,
-                linewidth=1,
-                edgecolor="none",
-                facecolor="yellow",
-                alpha=0.3,
-            )
-            ax.add_patch(rect)
+    draw_cells(ax, green_cells, "green")
+    draw_cells(ax, yellow_cells, "yellow")
 
     if path:
         for p in path:
+            draw_cells(ax, yellow_cells, "yellow")
+            rect = patches.Rectangle(
+                (p[1] - 0.5, p[0] - 0.5),
+                1,
+                1,
+                linewidth=1,
+                edgecolor="none",
+                facecolor="red",
+                alpha=0.1,
+            )
+            ax.add_patch(rect)
             ax.plot(p[1], p[0], "bo")  # Path points in blue
 
     if position:
@@ -57,25 +59,27 @@ def plot_maze(
     if text_above:
         fig.text(
             0.5,
-            0.95,
+            0.9,
             text_above,
+            alpha=1,
             fontsize=12,
             color="black",
             ha="center",
             va="center",
-            bbox=dict(facecolor="white", alpha=0.5),
+            bbox=dict(facecolor="none", alpha=0.0),
         )
 
     if text_below:
         fig.text(
             0.5,
-            0.05,
+            0.1,
             text_below,
+            alpha=0.5,
             fontsize=12,
             color="black",
             ha="center",
             va="center",
-            bbox=dict(facecolor="white", alpha=0.5),
+            bbox=dict(facecolor="none", alpha=0.0),
         )
 
     fig.canvas.draw()
@@ -86,15 +90,14 @@ def plot_maze(
 
 
 def create_gif(header, maze, path, start_position, finish_positions):
-    # Create a simple maze (0: path, 1: wall)
     maze = np.array(maze)
 
     # Define the path (sequence of (row, col) positions)
     path = [(cell.y, cell.x) for cell in path]
 
     # Define green and yellow cells
-    green_cells = [(start_position.y, start_position.x)]
-    yellow_cells = [(cell.y, cell.x) for cell in finish_positions]
+    green_cells = [start_position.to_tuple_yx()]
+    yellow_cells = [cell.to_tuple_yx() for cell in finish_positions]
 
     # Create frames for each step in the path
     frames = []
@@ -104,15 +107,13 @@ def create_gif(header, maze, path, start_position, finish_positions):
             position=pos,
             path=path[: i + 1],
             text_above=header,
-            text_below="matheusjardimb.com",
+            # Please, keep the reference to the source repo. Feel free to fork it and contribute!
+            text_below="https://github.com/matheusjardimb/maze_runner",
             green_cells=green_cells,
             yellow_cells=yellow_cells,
         )
         frames.append(image)
 
     # Save frames as a GIF
-    imageio.mimsave(
-        f"maze_path_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.gif",
-        frames,
-        fps=1,
-    )
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    imageio.mimsave(f"maze_path_{timestamp}.gif", frames, fps=1)
