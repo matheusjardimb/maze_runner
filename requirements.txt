@@ -8,6 +8,11 @@ setuptools==71.1.0
 wheel==0.43.0
 twine==5.1.1
 
+# GIF related
+imageio==2.34.2
+matplotlib==3.9.1
+numpy==2.0.1
+
 # Tests
 # pytest==7.3.1
 # pytest-cov==5.0.0

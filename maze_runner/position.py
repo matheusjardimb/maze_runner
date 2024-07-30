@@ -12,6 +12,9 @@ class Position:
     def __str__(self):
         return f"X={self.x}, Y={self.y}"
 
+    def to_tuple_yx(self) -> tuple:
+        return self.y, self.x
+
     def new_position_up(self) -> "Position":
         return Position(self.x, self.y - 1)
 
