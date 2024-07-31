@@ -18,7 +18,7 @@ class Maze:
     ACTUAL_POS_MARKER = "A"
 
     def __init__(
-            self, maze_file_path: str, steps_limit: int = None, sleep_interval: float = 0.5
+        self, maze_file_path: str, steps_limit: int = None, sleep_interval: float = 0.5
     ):
         super().__init__()
 
@@ -89,7 +89,7 @@ class Maze:
             self.positions,
             self.start_position,
             self.finish_positions,
-            fps
+            fps,
         )
 
     def print_maze_status(self, clean_console: bool = True) -> None:
