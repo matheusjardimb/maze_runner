@@ -22,13 +22,13 @@ def draw_cells(ax, cells, color):
 
 
 def plot_maze(
-        maze,
-        position=None,
-        path=None,
-        text_above=None,
-        text_below=None,
-        green_cells=None,
-        yellow_cells=None,
+    maze,
+    position=None,
+    path=None,
+    text_above=None,
+    text_below=None,
+    green_cells=None,
+    yellow_cells=None,
 ):
     fig, ax = plt.subplots(figsize=(5, 6))  # Increase figure height for text
     ax.imshow(maze, cmap="binary")
@@ -91,7 +91,7 @@ def plot_maze(
 
 def create_gif(header, maze, path, start_position, finish_positions, fps: int = 1):
     if fps < 1:
-        raise Exception('fps must be >= 1')
+        raise Exception("fps must be >= 1")
 
     maze = np.array(maze)
 
