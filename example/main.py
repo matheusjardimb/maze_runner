@@ -1,7 +1,7 @@
-from maze_runner.maze import Maze
+from maze_runner import Maze
 
 if "__main__" == __name__:
-    maze = Maze("maps/02.csv")
+    maze = Maze("../maps/02.csv")
     maze.clear_console()
 
     maze.print_maze_status()
@@ -15,5 +15,5 @@ if "__main__" == __name__:
     maze.print_maze_status()
     # Add your own GitHub Page
     maze.generate_animation(
-        "My amazing maze solution!\nBy: https://github.com/matheusjardimb"
+        header="My amazing maze solution!\nBy: https://github.com/matheusjardimb", fps=2
     )

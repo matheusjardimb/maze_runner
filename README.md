@@ -12,11 +12,11 @@
 
 ## Desenvolvimento
 
-Utilize o código [example/running_maze.py](example/running_maze.py) como referência. Será necessário instalar as
-dependências do projeto ([example/requirements.txt](example/requirements.txt)) e utilizar a versão correta do
-Python ([example/.python-version](example/.python-version)).
+Utilize o código da pasta [example/](example/) como referência. Será necessário instalar as
+dependências do projeto ([example/requirements.txt](example/requirements.txt)). Sugerimos utilizar a versão do Python
+indicada em ([example/.python-version](example/.python-version)).
 
-## Debug no PyCharm
+### Debug no PyCharm
 
 O erro abaixo pode ocorrer no console ao executar o comando `clear` (para limpar o console):
 ![debug_error.png](docs%2Fdebug_error.png)
@@ -25,7 +25,8 @@ Para resolvê-lo será necessário ativar "Emulate terminal in output console" n
 
 ![fix_pycharm.png](docs%2Ffix_pycharm.png)
 
-## TODO
+## Contribua!
 
+- [ ] Criou um mapa desafiador? Gere um MR adicionando-o na pasta maps
 - [ ] Add menu seletor de mapa (lista todas opções de .csv em maps/)
 - [ ] Servir os mapas como uma API

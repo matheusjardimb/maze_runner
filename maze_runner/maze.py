@@ -82,13 +82,14 @@ class Maze:
 
         self.steps_taken = 0
 
-    def generate_animation(self, header: str):
+    def generate_animation(self, header: str, fps: int = 1):
         create_gif(
             header,
             self.maze,
             self.positions,
             self.start_position,
             self.finish_positions,
+            fps,
         )
 
     def print_maze_status(self, clean_console: bool = True) -> None:

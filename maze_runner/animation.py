@@ -89,7 +89,10 @@ def plot_maze(
     return image
 
 
-def create_gif(header, maze, path, start_position, finish_positions):
+def create_gif(header, maze, path, start_position, finish_positions, fps: int = 1):
+    if fps < 1:
+        raise Exception("fps must be >= 1")
+
     maze = np.array(maze)
 
     # Define the path (sequence of (row, col) positions)
@@ -116,4 +119,4 @@ def create_gif(header, maze, path, start_position, finish_positions):
 
     # Save frames as a GIF
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    imageio.mimsave(f"maze_path_{timestamp}.gif", frames, fps=1)
+    imageio.mimsave(f"maze_path_{timestamp}.gif", frames, fps=fps)
