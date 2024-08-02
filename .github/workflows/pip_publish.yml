@@ -27,9 +27,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: python-package-distributions
-          path: |
-            dist/
-            VERSION
+          path: dist/
 
 
   publish-to-pypi:
@@ -78,6 +76,8 @@ jobs:
           inputs: >-
             ./dist/*.tar.gz
             ./dist/*.whl
+
+      - uses: actions/checkout@v4
 
       - name: List files
         run: |
