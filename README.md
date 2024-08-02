@@ -3,7 +3,7 @@
 [![PyPI Version](https://img.shields.io/pypi/v/maze_runner.svg?style=flat-square)](https://pypi.python.org/p/maze_runner)
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/matheusjardimb/maze_runner/)
 
-![readme_animation.gif](docs%2Freadme_animation.gif)
+![https://github.com/matheusjardimb/maze_runner/blob/develop/docs/readme_animation.gif?raw=true](https://github.com/matheusjardimb/maze_runner/blob/develop/docs/readme_animation.gif?raw=true)
 
 ## Regras
 
@@ -19,11 +19,11 @@ indicada em ([example/.python-version](example/.python-version)).
 ### Debug no PyCharm
 
 O erro abaixo pode ocorrer no console ao executar o comando `clear` (para limpar o console):
-![debug_error.png](docs%2Fdebug_error.png)
+![https://github.com/matheusjardimb/maze_runner/blob/main/docs/debug_error.png?raw=true](https://github.com/matheusjardimb/maze_runner/blob/main/docs/debug_error.png?raw=true)
 
 Para resolvê-lo será necessário ativar "Emulate terminal in output console" no Debug do PyCharm:
 
-![fix_pycharm.png](docs%2Ffix_pycharm.png)
+![https://github.com/matheusjardimb/maze_runner/blob/main/docs/fix_pycharm.png?raw=true](https://github.com/matheusjardimb/maze_runner/blob/main/docs/fix_pycharm.png?raw=true)
 
 ## Contribua!
 
