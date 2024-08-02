@@ -28,15 +28,12 @@ jobs:
         with:
           name: python-package-distributions
           path: dist/
-      - name: Set variables
-        run: |
-          VER=$(cat VERSION)
-          echo "VERSION=$VER" >> $GITHUB_ENV
+
 
   publish-to-pypi:
     name: >-
       Publish Python 🐍 distribution 📦 to PyPI
-#    if: startsWith(github.ref, 'refs/tags/')  # only publish to PyPI on tag pushes
+    #    if: startsWith(github.ref, 'refs/tags/')  # only publish to PyPI on tag pushes
     needs:
       - build
     runs-on: ubuntu-latest
@@ -79,6 +76,17 @@ jobs:
           inputs: >-
             ./dist/*.tar.gz
             ./dist/*.whl
+
+      - name: List files
+        run: |
+          ls ./dist/
+          ls
+
+      - name: Set variables
+        run: |
+          VER=$(cat VERSION)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}

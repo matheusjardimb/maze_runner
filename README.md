@@ -19,11 +19,11 @@ indicada em ([example/.python-version](example/.python-version)).
 ### Debug no PyCharm
 
 O erro abaixo pode ocorrer no console ao executar o comando `clear` (para limpar o console):
-![debug_error.png](docs%2Fdebug_error.png)
+![https://github.com/matheusjardimb/maze_runner/blob/main/docs/debug_error.png?raw=true](https://github.com/matheusjardimb/maze_runner/blob/main/docs/debug_error.png?raw=true)
 
 Para resolvê-lo será necessário ativar "Emulate terminal in output console" no Debug do PyCharm:
 
-![fix_pycharm.png](docs%2Ffix_pycharm.png)
+![https://github.com/matheusjardimb/maze_runner/blob/main/docs/fix_pycharm.png?raw=true](https://github.com/matheusjardimb/maze_runner/blob/main/docs/fix_pycharm.png?raw=true)
 
 ## Contribua!
 
