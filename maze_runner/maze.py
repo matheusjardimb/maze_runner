@@ -1,5 +1,4 @@
 import copy
-import csv
 import logging
 import os
 from time import sleep
@@ -36,11 +35,11 @@ class Maze:
         self.finish_positions = []
 
         # Start loading Maze file
-        with open(maze_file_path) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=",")
+        with open(maze_file_path) as file:
+            lines = file.readlines()
             line_count = 0
 
-            for y_pos, cells in enumerate(csv_reader):
+            for y_pos, cells in enumerate(lines):
                 # Validate maze width
                 if self.maze_width is None:
                     self.maze_width = len(cells)
@@ -82,7 +81,7 @@ class Maze:
 
         self.steps_taken = 0
 
-    def generate_animation(self, header: str, fps: int = 1):
+    def generate_animation(self, header: str, fps: int = 1, filename: str = None):
         create_gif(
             header,
             self.maze,
@@ -90,6 +89,7 @@ class Maze:
             self.start_position,
             self.finish_positions,
             fps,
+            filename,
         )
 
     def print_maze_status(self, clean_console: bool = True) -> None:
