@@ -22,14 +22,14 @@ jobs:
           build
           --user
       - name: Build a binary wheel and a source tarball
-        run: |
-          python3 -m build
-          cp VERSION dist/VERSION
+        run: python3 -m build
       - name: Store the distribution packages
         uses: actions/upload-artifact@v3
         with:
           name: python-package-distributions
-          path: dist/
+          path: |
+            dist/
+            VERSION
 
 
   publish-to-pypi:
@@ -81,7 +81,6 @@ jobs:
 
       - name: List files
         run: |
-          ls ./dist/
           ls
 
       - name: Set variables
