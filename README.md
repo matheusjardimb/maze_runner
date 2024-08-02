@@ -3,7 +3,7 @@
 [![PyPI Version](https://img.shields.io/pypi/v/maze_runner.svg?style=flat-square)](https://pypi.python.org/p/maze_runner)
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/matheusjardimb/maze_runner/)
 
-![readme_animation.gif](docs%2Freadme_animation.gif)
+![https://github.com/matheusjardimb/maze_runner/blob/develop/docs/readme_animation.gif?raw=true](https://github.com/matheusjardimb/maze_runner/blob/develop/docs/readme_animation.gif?raw=true)
 
 ## Regras
 
