@@ -65,6 +65,17 @@ jobs:
       id-token: write  # IMPORTANT: mandatory for sigstore
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: List files
+        run: ls
+
+      - name: Set variables
+        run: |
+          VER=$(cat VERSION)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+
+
       - name: Download all the dists
         uses: actions/download-artifact@v3
         with:
@@ -76,17 +87,6 @@ jobs:
           inputs: >-
             ./dist/*.tar.gz
             ./dist/*.whl
-
-      - uses: actions/checkout@v4
-
-      - name: List files
-        run: |
-          ls
-
-      - name: Set variables
-        run: |
-          VER=$(cat VERSION)
-          echo "VERSION=$VER" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         env:
