@@ -7,8 +7,10 @@
 
 ## Regras
 
-- Implemente seu algorítmo para encontrar a saída do labirinto
-- O programa irá falhar caso o limite de passos for atingido
+- Implemente seu algorítmo para encontrar a saída do labirinto.
+- O programa irá falhar caso o limite de passos for atingido.
+- Todos os labirintos possuem uma (ou mais) saída(s) válida(s).
+- O mesmo código fonte deve funcionar para todos os mapas.
 
 ## Desenvolvimento
 
@@ -28,5 +30,8 @@ Para resolvê-lo será necessário ativar "Emulate terminal in output console" n
 ## Contribua!
 
 - [ ] Criou um mapa desafiador? Gere um MR adicionando-o na pasta maps
+- [ ] Testar usar mapas importados da lib (como instanciar o Maze?)
+- [ ] Add testes automatizados
+- [ ] Add contador de passos dados no gif
 - [ ] Add menu seletor de mapa (lista todas opções de .csv em maps/)
 - [ ] Servir os mapas como uma API
