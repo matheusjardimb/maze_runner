@@ -26,14 +26,11 @@ class Maze:
         self.__sleep_interval = sleep_interval
 
         self.__maze = []
-
-        # TODO remover campos abaixo?
-        self.__maze_width = None
-        self.__maze_height = 0
-
         self.__positions = []
         self.__start_position = None
         self.__finish_positions = []
+
+        maze_width = None
 
         # Start loading Maze file
         with open(maze_file_path) as file:
@@ -42,9 +39,9 @@ class Maze:
 
             for y_pos, cells in enumerate(lines):
                 # Validate maze width
-                if self.__maze_width is None:
-                    self.__maze_width = len(cells)
-                elif self.__maze_width != len(cells):
+                if maze_width is None:
+                    maze_width = len(cells)
+                elif maze_width != len(cells):
                     raise Exception("All lines should have the same width")
 
                 # Validate has start position
@@ -65,15 +62,14 @@ class Maze:
                 self.__maze.append(row)
             print(f"Processed {line_count} lines.")
 
-        self.__maze_height = len(self.__maze)
-
         if len(self.__finish_positions) == 0:
             raise Exception("Map has no finishing cells")
         else:
             logger.info(f"Found {len(self.__finish_positions)} finishing cell(s).")
 
         if steps_limit is None:
-            self.__step_limit = self.__maze_width * self.__maze_height * 4
+            maze_height = len(self.__maze)
+            self.__step_limit = maze_width * maze_height * 4
         else:
             if steps_limit <= 1:
                 raise Exception("Steps limit should be > 1")
@@ -82,6 +78,12 @@ class Maze:
 
     def steps_taken_count(self):
         return len(self.__positions)
+
+    def get_maze_height(self):
+        return len(self.__maze)
+
+    def get_maze_width(self):
+        return len(self.__maze[0])
 
     def get_steps_limit(self):
         return self.__step_limit
@@ -147,7 +149,10 @@ class Maze:
     def can_move_to_position(self, new_pos: Position) -> bool:
         if new_pos.x < 0 or new_pos.y < 0:
             return False
-        if new_pos.x > self.__maze_width - 1 or new_pos.y > self.__maze_height - 1:
+        if (
+            new_pos.x > self.get_maze_width() - 1
+            or new_pos.y > self.get_maze_height() - 1
+        ):
             return False
         return self.__maze[new_pos.y][new_pos.x] == self.EMPTY_CELL
 
