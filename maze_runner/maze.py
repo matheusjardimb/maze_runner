@@ -23,16 +23,17 @@ class Maze:
 
         if sleep_interval < 0:
             raise Exception("Sleep interval should be >= 0")
-        self.sleep_interval = sleep_interval
+        self.__sleep_interval = sleep_interval
 
-        self.maze = []
+        self.__maze = []
 
-        self.maze_width = None
-        self.maze_height = 0
+        # TODO remover campos abaixo?
+        self.__maze_width = None
+        self.__maze_height = 0
 
-        self.positions = []
-        self.start_position = None
-        self.finish_positions = []
+        self.__positions = []
+        self.__start_position = None
+        self.__finish_positions = []
 
         # Start loading Maze file
         with open(maze_file_path) as file:
@@ -41,71 +42,79 @@ class Maze:
 
             for y_pos, cells in enumerate(lines):
                 # Validate maze width
-                if self.maze_width is None:
-                    self.maze_width = len(cells)
-                elif self.maze_width != len(cells):
+                if self.__maze_width is None:
+                    self.__maze_width = len(cells)
+                elif self.__maze_width != len(cells):
                     raise Exception("All lines should have the same width")
 
                 # Validate has start position
                 if self.START_POS_MARKER in cells:
                     x_pos = cells.index(self.START_POS_MARKER)
                     if x_pos != -1:
-                        if self.start_position is None:
-                            self.start_position = Position(x=x_pos, y=y_pos)
-                            self.positions.append(self.start_position)
+                        if self.__start_position is None:
+                            self.__start_position = Position(x=x_pos, y=y_pos)
+                            self.__positions.append(self.__start_position)
                         else:
                             raise Exception("Map should have ony one starting cell")
 
                 row = []
                 for x_pos, cell in enumerate(cells):
                     if cell == self.FINISH_POS_MARKER:
-                        self.finish_positions.append(Position(x=x_pos, y=y_pos))
+                        self.__finish_positions.append(Position(x=x_pos, y=y_pos))
                     row.append(1 if cell == self.WALL_MARKER else 0)
-                self.maze.append(row)
+                self.__maze.append(row)
             print(f"Processed {line_count} lines.")
 
-        self.maze_height = len(self.maze)
+        self.__maze_height = len(self.__maze)
 
-        if len(self.finish_positions) == 0:
+        if len(self.__finish_positions) == 0:
             raise Exception("Map has no finishing cells")
         else:
-            logger.info(f"Found {len(self.finish_positions)} finishing cell(s).")
+            logger.info(f"Found {len(self.__finish_positions)} finishing cell(s).")
 
         if steps_limit is None:
-            self.step_limit = self.maze_width * self.maze_height * 2
+            self.__step_limit = self.__maze_width * self.__maze_height * 4
         else:
             if steps_limit <= 1:
                 raise Exception("Steps limit should be > 1")
             else:
-                self.step_limit = steps_limit
+                self.__step_limit = steps_limit
 
-        self.steps_taken = 0
+    def steps_taken_count(self):
+        return len(self.__positions)
+
+    def get_steps_limit(self):
+        return self.__step_limit
+
+    def get_pending_steps(self):
+        return self.get_steps_limit() - self.steps_taken_count()
 
     def generate_animation(self, header: str, fps: int = 1, filename: str = None):
         create_gif(
             header,
-            self.maze,
-            self.positions,
-            self.start_position,
-            self.finish_positions,
+            self.__maze,
+            self.__positions,
+            self.__start_position,
+            self.__finish_positions,
             fps,
             filename,
         )
 
     def print_maze_status(self, clean_console: bool = True) -> None:
-        self.sleep(self.sleep_interval)
+        self.sleep(self.__sleep_interval)
 
         if clean_console:
             self.clear_console()
 
-        print(f"Steps: {self.steps_taken}/{self.step_limit}")
-        maze = copy.deepcopy(self.maze)
+        print(f"Steps: {self.steps_taken_count()}/{self.__step_limit}")
+        maze = copy.deepcopy(self.__maze)
         maze = [
-            [" " if cell == self.EMPTY_CELL else "#" for cell in row] for row in maze
+            [" " if cell == self.EMPTY_CELL else self.WALL_MARKER for cell in row]
+            for row in maze
         ]
-        maze[self.start_position.y][self.start_position.x] = self.START_POS_MARKER
+        maze[self.__start_position.y][self.__start_position.x] = self.START_POS_MARKER
 
-        for finish_position in self.finish_positions:
+        for finish_position in self.__finish_positions:
             maze[finish_position.y][finish_position.x] = self.FINISH_POS_MARKER
 
         cur_pos = self.get_current_position()
@@ -119,13 +128,13 @@ class Maze:
             print(line)
 
         if self.has_finished():
-            print(f"Exit found at {cur_pos} with {self.steps_taken} steps.")
+            print(f"Exit found at {cur_pos} with {self.steps_taken_count()} steps.")
 
     def get_current_position(self):
-        return self.positions[-1]
+        return self.__positions[-1]
 
     def has_finished(self) -> bool:
-        return self.get_current_position() in self.finish_positions
+        return self.get_current_position() in self.__finish_positions
 
     @staticmethod
     def clear_console() -> None:
@@ -138,9 +147,9 @@ class Maze:
     def can_move_to_position(self, new_pos: Position) -> bool:
         if new_pos.x < 0 or new_pos.y < 0:
             return False
-        if new_pos.x > self.maze_width - 1 or new_pos.y > self.maze_height - 1:
+        if new_pos.x > self.__maze_width - 1 or new_pos.y > self.__maze_height - 1:
             return False
-        return self.maze[new_pos.y][new_pos.x] == self.EMPTY_CELL
+        return self.__maze[new_pos.y][new_pos.x] == self.EMPTY_CELL
 
     def __can_move_to(self, new_pos) -> Position | bool:
         if self.can_move_to_position(new_pos):
@@ -161,13 +170,12 @@ class Maze:
 
     def __move_position(self, direction_method) -> bool:
         self.print_maze_status()
-        if self.steps_taken > self.step_limit:
+        if self.steps_taken_count() > self.__step_limit:
             raise Exception("Step limit reached")
-        self.steps_taken += 1
 
         new_pos = direction_method()
         if new_pos is not False:
-            self.positions.append(new_pos)
+            self.__positions.append(new_pos)
             return True
         print("Step missed, can't move in this direction")
         return False
