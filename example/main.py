@@ -15,5 +15,5 @@ if "__main__" == __name__:
     maze.print_maze_status()
     # Add your own GitHub Page
     maze.generate_animation(
-        header="My amazing maze solution!\nBy: https://github.com/matheusjardimb", fps=2
+        header="My amazing solution!\nBy https://github.com/matheusjardimb", fps=2
     )
