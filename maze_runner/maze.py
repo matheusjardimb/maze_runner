@@ -38,6 +38,7 @@ class Maze:
             line_count = 0
 
             for y_pos, cells in enumerate(lines):
+                cells = cells.replace("\n", "")
                 # Validate maze width
                 if maze_width is None:
                     maze_width = len(cells)
@@ -77,7 +78,7 @@ class Maze:
                 self.__step_limit = steps_limit
 
     def steps_taken_count(self):
-        return len(self.__positions)
+        return len(self.__positions) - 1
 
     def get_maze_height(self):
         return len(self.__maze)
@@ -108,7 +109,7 @@ class Maze:
         if clean_console:
             self.clear_console()
 
-        print(f"Steps: {self.steps_taken_count()}/{self.__step_limit}")
+        print(f"Steps: {self.steps_taken_count()}/{self.get_steps_limit()}")
         maze = copy.deepcopy(self.__maze)
         maze = [
             [" " if cell == self.EMPTY_CELL else self.WALL_MARKER for cell in row]
@@ -175,7 +176,7 @@ class Maze:
 
     def __move_position(self, direction_method) -> bool:
         self.print_maze_status()
-        if self.steps_taken_count() > self.__step_limit:
+        if self.steps_taken_count() > self.get_steps_limit():
             raise Exception("Step limit reached")
 
         new_pos = direction_method()
