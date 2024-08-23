@@ -35,7 +35,6 @@ class Maze:
         # Start loading Maze file
         with open(maze_file_path) as file:
             lines = file.readlines()
-            line_count = 0
 
             for y_pos, cells in enumerate(lines):
                 cells = cells.replace("\n", "")
@@ -61,7 +60,6 @@ class Maze:
                         self.__finish_positions.append(Position(x=x_pos, y=y_pos))
                     row.append(1 if cell == self.WALL_MARKER else 0)
                 self.__maze.append(row)
-            print(f"Processed {line_count} lines.")
 
         if len(self.__finish_positions) == 0:
             raise Exception("Map has no finishing cells")
