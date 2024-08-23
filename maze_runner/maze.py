@@ -38,6 +38,7 @@ class Maze:
             line_count = 0
 
             for y_pos, cells in enumerate(lines):
+                cells = cells.replace("\n", "")
                 # Validate maze width
                 if maze_width is None:
                     maze_width = len(cells)
