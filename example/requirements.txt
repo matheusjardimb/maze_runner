@@ -1,1 +1,2 @@
-maze_runner
+# Update the version bellow with the latest found at https://github.com/matheusjardimb/maze_runner/
+maze_runner==0.3.4

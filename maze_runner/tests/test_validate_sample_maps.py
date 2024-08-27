@@ -1,7 +1,7 @@
 import os
 import glob
 
-from maze_runner import Maze
+from ..maze import Maze
 
 
 def test_validate_sample_maps():
